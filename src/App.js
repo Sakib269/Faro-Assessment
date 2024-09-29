@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from './login';
+import AssetList from './assets';
+import ProtectedRoute from './protectedroute';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const handleLogin = () => {
+        localStorage.setItem('isLoggedIn', 'true');
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('isLoggedIn');
+    };
+
+    return (
+        <Router>
+            <Routes>
+                {/* Public Route */}
+                <Route path="/" element={<Login handleLogin={handleLogin} />} />
+                
+                {/* Protected Route */}
+                <Route element={<ProtectedRoute />}>
+                    <Route path="/assets" element={<AssetList onLogout={handleLogout} />} />
+                </Route>
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;
